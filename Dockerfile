@@ -1,26 +1,27 @@
-FROM debian:jessie
-MAINTAINER Sita Liu <chsliu+docker@gmail>
+FROM debian:stable-slim
+MAINTAINER SFCampbell (https://github.com/sfcampbell/docker-webmin); forked from Sita Liu <chsliu+docker@gmail>
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Denver
+ENV LOCALE=en_US.UTF-8
 
 RUN echo root:pass | chpasswd && \
 	echo "Acquire::GzipIndexes \"false\"; Acquire::CompressionTypes::Order:: \"gz\";" >/etc/apt/apt.conf.d/docker-gzip-indexes && \
+	ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && \
+	echo "$TZ" > /etc/timezone && \
+	apt-get update && apt-get install -y apt-utils && apt-get upgrade -y --with-new-pkgs && \
+	apt-get install -y wget locales gnupg iproute2 moreutils && \
+	echo "$LOCALE" > /etc/locale-gen && \
+	locale-gen && \
+	/usr/bin/touch /etc/apt/sources.list && \
+	wget https://raw.githubusercontent.com/webmin/webmin/master/setup-repos.sh && \
+	sh setup-repos.sh -f && \
 	apt-get update && \
-	apt-get install -y \
-	wget \
-	locales && \
-	dpkg-reconfigure locales && \
-	locale-gen C.UTF-8 && \
-	/usr/sbin/update-locale LANG=C.UTF-8 && \
-	wget http://www.webmin.com/jcameron-key.asc && \
-	apt-key add jcameron-key.asc && \
-	echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list && \
-	echo "deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib" >> /etc/apt/sources.list && \
-	apt-get update && \
-	apt-get install -y webmin && \
+	apt-get install -y webmin --install-recommends && \
+	apt-get autoremove -y --purge && \
 	apt-get clean
 
-
-ENV LC_ALL C.UTF-8
+ENV LC_ALL $LOCALE
 
 EXPOSE 10000
 
