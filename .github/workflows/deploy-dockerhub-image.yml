@@ -1,0 +1,42 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - 
+        uses: actions/checkout@v3
+        name: Build the Docker image
+
+      - 
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+    
+      - 
+        uses: docker/login-action@v1
+        name: Login to DockerHub
+        with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+            
+      -
+        name: Build and push Docker Webmin
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: longlivethepenguin/webmin:$(date +%s)
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+          cache-from: type=registry,ref=longlivethepenguin/webmin:$(date +%s)
+          cache-to: type=inline
+#        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
