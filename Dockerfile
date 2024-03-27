@@ -15,11 +15,7 @@ RUN echo root:pass | chpasswd && \
 	locale-gen && \
 	/usr/bin/touch /etc/apt/sources.list && \
 	wget https://raw.githubusercontent.com/webmin/webmin/master/setup-repos.sh && \
-	sh setup-repos.sh -f && \
-	apt-get update && \
-	apt-get install -y webmin --install-recommends && \
-	apt-get autoremove -y --purge && \
-	apt-get clean
+	sh setup-repos.sh -f && apt-get update && apt-get install -y webmin --install-recommends && apt-get autoremove -y --purge && apt-get clean
 
 ENV LC_ALL $LOCALE
 
