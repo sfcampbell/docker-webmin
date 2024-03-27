@@ -35,8 +35,8 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: longlivethepenguin/webmin:$(date +%s)
+          tags: longlivethepenguin/webmin:latest
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
-          cache-from: type=registry,ref=longlivethepenguin/webmin:$(date +%s)
+          cache-from: type=registry,ref=longlivethepenguin/webmin:latest
           cache-to: type=inline
 #        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
