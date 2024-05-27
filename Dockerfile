@@ -9,8 +9,7 @@ RUN echo root:pass | chpasswd && \
 	echo "Acquire::GzipIndexes \"false\"; Acquire::CompressionTypes::Order:: \"gz\";" >/etc/apt/apt.conf.d/docker-gzip-indexes && \
 	ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && \
 	echo "$TZ" > /etc/timezone && \
-	apt-get update && apt-get install -y apt-utils && apt-get upgrade -y --with-new-pkgs && \
-	apt-get install -y wget locales gnupg iproute2 moreutils && \
+	apt-get update && apt-get install -y apt-utils wget locales gnupg iproute2 moreutils && apt-get upgrade -y --with-new-pkgs && \
 	echo "$LOCALE" > /etc/locale-gen && \
 	locale-gen && \
 	/usr/bin/touch /etc/apt/sources.list && \
