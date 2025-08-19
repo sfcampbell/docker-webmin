@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:bookworm-slim
 MAINTAINER SFCampbell (https://github.com/sfcampbell/docker-webmin); forked from Sita Liu <chsliu+docker@gmail>
 
 ARG DEBIAN_FRONTEND=noninteractive
